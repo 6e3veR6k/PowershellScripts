@@ -5,4 +5,3 @@ $jIncore = New-Object System.Management.Automation.PSCredential -ArgumentList 'o
 
 Invoke-Command -ComputerName 'hq01ju06' -Credential $jAdmin -ScriptBlock {  Get-ChildItem 'C:\inetpub\Jupiter\Amalthee' | where {$_.Name -like "*App_Offline*"} };
 
-Restart-Computer -ComputerName 'hq01ju06' -Credential $jAdmin -AsJob
