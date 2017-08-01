@@ -5,6 +5,8 @@
 #convert from plaintext to securestring;
 #choose your password and write it to a file:
 
+94J5ZFKbKzxeYDFTfeto
+
 read-host -assecurestring | convertfrom-securestring | out-file C:\securestring.txt;
 
 #In the future, you won't have to enter your credentials over and over again, 

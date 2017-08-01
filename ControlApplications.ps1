@@ -20,6 +20,7 @@ class Application
     {
  
         $fileInfo = Invoke-Command -ComputerName $server `
+                                    -Port '80'`
                                     -Credential $this.AppCredential `
                                     -ScriptBlock { param($Path) Get-ChildItem $Path | where {$_.Name -like "*App_Offline*"} } `
                                     -ArgumentList $this.AplicationPath;
@@ -31,10 +32,11 @@ class Application
     hidden [void]RenameFile([string]$NewFileName, [string]$server)
     {
  
-        $fileInfo = Invoke-Command  -ComputerName $server `
-                                    -Credential $this.AppCredential `
-                                    -ScriptBlock { param($App_Offline_FullName, $App_Offline_NewName)  Rename-Item $App_Offline_FullName -NewName $App_Offline_NewName  } `
-                                    -ArgumentList $this.GetAppFilePath($server), $NewFileName;
+        Invoke-Command  -ComputerName $server `
+                        -Port '80'`
+                        -Credential $this.AppCredential `
+                        -ScriptBlock { param($App_Offline_FullName, $App_Offline_NewName)  Rename-Item $App_Offline_FullName -NewName $App_Offline_NewName  } `
+                        -ArgumentList $this.GetAppFilePath($server), $NewFileName;
         Write-Host "New file name: " $server $this.GetAppFilePath($server)
     }
 
@@ -58,6 +60,7 @@ class Application
         ForEach ($server in $this.Servers) 
         {
             Invoke-Command -ComputerName $server `
+                            -Port '80'`
                             -Credential $this.AppCredential `
                             -ScriptBlock $_sb;
 
@@ -68,10 +71,6 @@ class Application
     }
 
 }
-
-
-
-
 
 
 #Get credential object for our users
@@ -92,19 +91,22 @@ $JupiterServers = [psobject]@{
 $AmaltheePath = 'C:\inetpub\Jupiter\Amalthee';
 
 #Define Leda application folder:
-$LedaPath = 'C:\inetpub\Jupiter\Leda';
+#$LedaPath = 'C:\inetpub\Jupiter\Leda';
 
 
 #Get access to application servers
 $AmaltheeApp = [Application]::new($JupiterServers.AmaltheeApp, $jAdmin, $AmaltheePath)
-$BackOffice = [Application]::new($JupiterServers.BackOffice, $jAdmin, $AmaltheePath)
+#$BackOffice = [Application]::new($JupiterServers.BackOffice, $jAdmin, $AmaltheePath)
 
 
 
 
 #Change filename on each servers. To stop application change parameter to 'App_Offline.htm'
-$AmaltheeApp.ApplicationClose('____App_Offline.htm');
-$BackOffice.IISsRestart();
+$AmaltheeApp.ApplicationClose('_test3__App_Offline.htm');
+#$BackOffice.IISsRestart();
+
+#должен добавить порт
+#Invoke-Command –ComputerName <Netbios> -Port <Port>
 
 
 
