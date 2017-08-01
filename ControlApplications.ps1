@@ -1,4 +1,6 @@
-﻿class Application 
+﻿#param ( $NewAppOflineFileName = '____App_Offline.htm' )
+
+class Application 
 {
 
     [string[]]$Servers;
@@ -48,7 +50,28 @@
         }
     }
 
+
+    [void]IISsRestart()
+    {
+        $_sb = Start-Process -FilePath C:\Windows\System32\iisreset.exe -ArgumentList /RESTART -RedirectStandardOutput .\iisreset.txt
+
+        ForEach ($server in $this.Servers) 
+        {
+            Invoke-Command -ComputerName $server `
+                            -Credential $this.AppCredential `
+                            -ScriptBlock $_sb;
+
+            Get-Content .\iisreset.txt | Write-Log -Level Info;
+        }
+
+        
+    }
+
 }
+
+
+
+
 
 
 #Get credential object for our users
@@ -74,9 +97,14 @@ $LedaPath = 'C:\inetpub\Jupiter\Leda';
 
 #Get access to application servers
 $AmaltheeApp = [Application]::new($JupiterServers.AmaltheeApp, $jAdmin, $AmaltheePath)
+$BackOffice = [Application]::new($JupiterServers.BackOffice, $jAdmin, $AmaltheePath)
+
+
 
 
 #Change filename on each servers. To stop application change parameter to 'App_Offline.htm'
-$AmaltheeApp.ApplicationClose('____App_Offline.htm')
+$AmaltheeApp.ApplicationClose('____App_Offline.htm');
+$BackOffice.IISsRestart();
+
 
 
