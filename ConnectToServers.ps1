@@ -6,13 +6,13 @@ $IIS_server_Leda = 'hq01ju01';
 
 
 $juUser = 'oranta\jAdmin'
-$juPlPswrd = '94J5ZFKbKzxeYDFTfeto'
+$juPlPswrd = '__________________'
 $juSecurePassword = $juPlPswrd | ConvertTo-SecureString -AsPlainText -Force
 $juCredentials = New-Object System.Management.Automation.PSCredential -ArgumentList $juUser, $juSecurePassword
 
 
 $ledaUser = 'HQ01JU01\jincore'
-$ledaPlPswrd = 'rGvyjr0r5bJun'
+$ledaPlPswrd = '___________'
 $ledaSecurePassword = $ledaPlPswrd | ConvertTo-SecureString -AsPlainText -Force
 $ledaCredentials = New-Object System.Management.Automation.PSCredential -ArgumentList $ledaUser, $ledaSecurePassword
 
